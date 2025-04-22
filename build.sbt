@@ -53,8 +53,8 @@ val hasMKL = {
   val firstPlatform = org.bytedeco.sbt.javacpp.Platform.current.head
   firstPlatform == "linux-x86_64" || firstPlatform == "windows-x86_64"
 }
-libraryDependencies +=   "dev.storch" % "core_3" % "0.1.9-2.4.4"
-libraryDependencies +=   "dev.storch" % "vision_3" % "0.1.9-2.4.4"
+libraryDependencies +=   "dev.storch" % "core_3" % "0.2.3-1.15.1"
+libraryDependencies +=   "dev.storch" % "vision_3" % "0.2.3-1.15.1"
 libraryDependencies +=  "org.scalameta" %% "munit" % "0.7.29" //% Test
 libraryDependencies +=  "org.scalameta" %% "munit-scalacheck" % "0.7.29" // % Test
 ThisBuild  / assemblyMergeStrategy := {
