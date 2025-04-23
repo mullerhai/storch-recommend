@@ -1,10 +1,11 @@
 package torch.recommend.model
 
 import torch.*
+import torch.nn.modules.container.{ModuleDict, ModuleList, Sequential}
 import torch.nn.modules.{HasParams, TensorModule}
 import torch.recommend.layer as nns
 import torch.recommend.layer.IntOrString
-import torch.nn.modules.container.{ModuleDict, ModuleList, Sequential}
+
 import scala.collection.mutable.ListBuffer
 
 final class SharedBottomModel[ParamType <: FloatNN : Default](
@@ -15,15 +16,16 @@ final class SharedBottomModel[ParamType <: FloatNN : Default](
                                                                tower_mlp_dims: Seq[Int],
                                                                task_num: Int,
                                                                dropout: Float
-                                                     ) extends HasParams[ParamType]
+                                                             ) extends HasParams[ParamType]
   with TensorModule[ParamType] {
-  val embedding = registerModule(nns.FeaturesEmbedding(categorical_field_dims,embed_dim = embed_dim))
-  val numerical_layer = registerModule(nn.Linear(numerical_num,embed_dim))
-  val embed_output_dim =(categorical_field_dims.length +1) *embed_dim
+  val embedding = registerModule(nns.FeaturesEmbedding(categorical_field_dims, embed_dim = embed_dim))
+  val numerical_layer = registerModule(nn.Linear(numerical_num, embed_dim))
+  val embed_output_dim = (categorical_field_dims.length + 1) * embed_dim
 
-  val bottom  = registerModule(nns.MultiLayerPerceptron(embed_output_dim,bottom_mlp_dims,dropout,false))
-  val towerLayers = for i <- 0 until(task_num) yield nns.MultiLayerPerceptron(bottom_mlp_dims.last,tower_mlp_dims,dropout)
-  val tower = ModuleList[ParamType](towerLayers*)
+  val bottom = registerModule(nns.MultiLayerPerceptron(embed_output_dim, bottom_mlp_dims, dropout, false))
+  val towerLayers = for i <- 0 until (task_num) yield nns.MultiLayerPerceptron(bottom_mlp_dims.last, tower_mlp_dims, dropout)
+  val tower = ModuleList[ParamType](towerLayers *)
+
   override def apply(v1: Tensor[ParamType]): Tensor[ParamType] = ???
 
   def apply(categorical_x: Tensor[ParamType], numerical_x: Tensor[ParamType]): Seq[Tensor[ParamType]] = {
@@ -31,8 +33,8 @@ final class SharedBottomModel[ParamType <: FloatNN : Default](
     val numerical_emb = numerical_layer(numerical_x).unsqueeze(1)
     val emb = torch.cat(Seq(categorical_emb, numerical_emb), dim = 1).view(-1, embed_output_dim)
     val fea = bottom(emb)
-    val results = for i <- 0 until(task_num) yield torch.sigmoid(tower(i)(fea).squeeze(1)).to(this.paramType)
-    results.toSeq  
+    val results = for i <- 0 until (task_num) yield torch.sigmoid(tower(i)(fea).squeeze(1)).to(this.paramType)
+    results.toSeq
   }
 
 }

@@ -15,18 +15,37 @@ import scala.collection.immutable.Seq
 
 ThisBuild / tlBaseVersion := "0.0" // your current series x.y
 //ThisBuild / CoursierCache := file("D:\\coursier")
-ThisBuild / organization := "dev.storch"
+ThisBuild / organization := "io.github.mullerhai" //"dev.storch"
 ThisBuild / organizationName := "storch.dev"
 ThisBuild / startYear := Some(2024)
 ThisBuild / licenses := Seq(License.Apache2)
 ThisBuild / developers := List(
   // your GitHub handle and name
-  tlGitHubDev("muller", "mullerhai")
+  tlGitHubDev("mullerhai", "mullerhai")
 )
 ThisBuild / version := "0.1.0"
 
 ThisBuild / scalaVersion := "3.6.4"
 ThisBuild / tlSonatypeUseLegacyHost := false
+
+import xerial.sbt.Sonatype.sonatypeCentralHost
+ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
+
+import ReleaseTransformations._
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("+publishSigned"),
+  releaseStepCommandAndRemaining("sonatypeBundleRelease"),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges,
+)
 
 lazy val root = (project in file("."))
   .settings(

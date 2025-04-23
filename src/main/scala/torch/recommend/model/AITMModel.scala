@@ -40,17 +40,18 @@ final class AITMModel[ParamType <: FloatNN : Default](
     val feaLayer = for i <- 0 until (task_num) yield bottom(i)(emb)
     val fea = new ListBuffer[Tensor[ParamType]]()
     fea.addAll(feaLayer)
-    for (i <- 1 until (task_num) ){
+    for (i <- 1 until (task_num)) {
       val p = gate(i - 1)(fea(i - 1)).unsqueeze(1)
       val q = fea(i).unsqueeze(1)
       val x = torch.cat(Seq(p, q), dim = 1)
       val V = h1(x)
       val K = h2(x)
       val Q = h3(x)
-      fea(i) = torch.sum(
-        nn.functional.softmax(
+//      fea[i] = torch.sum(torch.nn.functional.softmax(torch.sum(K * Q, 2, True) / np.sqrt(self.hidden_dim), dim=1) * V, 1)
+      val softmax = nn.functional.softmax(
         torch.sum(K * Q, 2, true) / torch.sqrt(torch.Tensor(hidden_dim)),
-          dim = 1) * V,dim = 1)
+        dim = 1) * V
+      fea(i) = torch.sumWithDim(softmax.to(this.paramType), dim = 1)
     }
     val results = for i <- 0 until (task_num) yield torch.sigmoid(tower(i)(fea(i).squeeze(1)))
     results.map(_.to(this.paramType))
