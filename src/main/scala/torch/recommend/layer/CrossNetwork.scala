@@ -10,8 +10,10 @@ class CrossNetwork[ParamType <: FloatNN : Default](input_dim: Long,
 
   val w = nn.ModuleList[ParamType]()
   val b = ListBuffer[Tensor[ParamType]] ()// nn.ModuleList[ParamType]()
+  //todo Submodule 'CrossNetwork' already defined, cause by ModuleList append has bigs bug
   for (i <- 0 until num_layers) {
-    w.append(register(nn.Linear(input_dim, 1l,add_bias = false)))
+    w.insert(i,register(nn.Linear(input_dim, 1l,add_bias = false),s"block_${i}"))
+//    w.append(register(nn.Linear(input_dim, 1l,add_bias = false)))
     b.append(torch.zeros(input_dim.toInt).to(dtype = this.paramType))
   }
 

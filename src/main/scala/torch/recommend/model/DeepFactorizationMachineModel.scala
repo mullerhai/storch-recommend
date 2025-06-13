@@ -8,7 +8,7 @@ class DeepFactorizationMachineModel[ParamType <: FloatNN: Default](
                                                                     fieldDims: Seq[Int],
                                                                     embedDim: Int,
                                                                     mlpDims: Seq[Int],
-    dropout: Int
+    dropout: Float
 ) extends HasParams[ParamType]
     with TensorModule[ParamType] {
 
@@ -38,6 +38,6 @@ object DeepFactorizationMachineModel:
       field_dims: Seq[Int],
       embed_dim: Int,
       mlp_dims: Seq[Int],
-      dropout: Int
+      dropout: Float
   ): DeepFactorizationMachineModel[ParamType] =
     new DeepFactorizationMachineModel(field_dims, embed_dim, mlp_dims, dropout)

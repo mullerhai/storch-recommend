@@ -13,13 +13,19 @@ final class EmbeddingModule[ParamType <: FloatNN: Default](
     useSeNet: Boolean
 ) extends HasParams[ParamType]
     with TensorModule[ParamType] {
-  val embNets = nn.ModuleList[ParamType]()
-  //  val seNet = if (useSeNet) register(new SENet(sparseNum)) else None
-  val seNet = register(new SENet(sparseNum))
+
+  //todo  has init error ,sparseNum must >0
+  var sparseNum = datatypes.length
   var denseDim = 0
   var sparseDim = 0
-  var sparseNum = 0
+//  var sparseNum = 0
+  val embNets = nn.ModuleList[ParamType]()
+//  val seNet = if (useSeNet) register(new SENet(sparseNum)) else None
 
+  val seNet = register(new SENet(sparseNum))
+
+
+  var index = 1
   for (datatype <- datatypes) {
     datatype("type") match {
       case "SparseEncoder" | "BucketSparseEncoder" =>
@@ -32,7 +38,7 @@ final class EmbeddingModule[ParamType <: FloatNN: Default](
           case s: String => 0
         }
         val emb = nn.Embedding(length, emb_dim)
-        embNets.append(emb.asInstanceOf[TensorModule[ParamType]])
+        embNets.insert(index,emb.asInstanceOf[TensorModule[ParamType]])
         sparseDim += emb_dim
         sparseNum += 1
       case "MultiSparseEncoder" =>
@@ -45,7 +51,8 @@ final class EmbeddingModule[ParamType <: FloatNN: Default](
           case s: String => 0
         }
         val emb_bag = nn.EmbeddingBag(length, emb_dim, mode = "sum")
-        embNets.append(emb_bag.asInstanceOf[TensorModule[ParamType]])
+//        embNets.append(emb_bag.asInstanceOf[TensorModule[ParamType]])
+        embNets.insert(index,emb_bag.asInstanceOf[TensorModule[ParamType]])
         sparseDim += emb_dim
         sparseNum += 1
       case "DenseEncoder" =>
@@ -59,6 +66,7 @@ final class EmbeddingModule[ParamType <: FloatNN: Default](
         denseDim += size
         denseNum += 1
     }
+    index += 1
   }
   var denseNum = 0
 

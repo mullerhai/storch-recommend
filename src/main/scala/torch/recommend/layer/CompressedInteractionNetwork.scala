@@ -15,12 +15,14 @@ class CompressedInteractionNetwork[ParamType <: FloatNN: Default](
 
   val num_layers = cross_layer_sizes.length
   val splitHalf = split_half
-  var prev_dim: Int = 0
+  var prev_dim: Int = 1//0 //todo  why 0 or 1
   var fc_input_dim: Long = 0
   val conv_layers = nn.ModuleList[ParamType]()
   for (i <- 0 until num_layers) {
     var cross_layer_size = cross_layer_sizes(i)
-    conv_layers.append(
+    //todo moduleList append has bigs bug
+    conv_layers.insert(
+      i,
       nn.Conv1d(
         input_dim * prev_dim,
         cross_layer_size,
@@ -29,6 +31,15 @@ class CompressedInteractionNetwork[ParamType <: FloatNN: Default](
         dilation = 1,
         bias = true
       )
+//    conv_layers.append(
+//      nn.Conv1d(
+//        input_dim * prev_dim,
+//        cross_layer_size,
+//        kernel_size = 1,
+//        stride = 1,
+//        dilation = 1,
+//        bias = true
+//      )
     )
     if (splitHalf && i != num_layers - 1) {
       cross_layer_size = math.floor(cross_layer_size / 2).toInt

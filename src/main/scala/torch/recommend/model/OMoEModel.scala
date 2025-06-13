@@ -47,3 +47,25 @@ final class OMoEModel[ParamType <: FloatNN : Default](
   override def apply(v1: Tensor[ParamType]): Tensor[ParamType] = ???
 }
 
+object OMoEModel {
+  def apply[ParamType <: FloatNN : Default](
+                                            categorical_field_dims: Seq[Int],
+                                            numerical_num: Int,
+                                            embed_dim: Int,
+                                            bottom_mlp_dims: Seq[Int],
+                                            tower_mlp_dims: Seq[Int],
+                                            task_num: Int,
+                                            expert_num: Int,
+                                            dropout: Float
+                                          ): OMoEModel[ParamType] = new OMoEModel(
+                                            categorical_field_dims,
+                                            numerical_num,
+                                            embed_dim,
+                                            bottom_mlp_dims,
+                                            tower_mlp_dims,
+                                            task_num,
+                                            expert_num,
+                                            dropout
+                                          )
+  
+}

@@ -8,7 +8,7 @@ class FeaturesLinear[ParamType <: FloatNN: Default](fieldDim: Seq[Int], outputDi
     with TensorModule[ParamType] {
 
   val embedding = register(nn.Embedding(fieldDim.sum, outputDim))
-  val bias = torch.zeros(Seq(outputDim, -1))
+  val bias = torch.zeros(Seq(outputDim, fieldDim.last))
   val offsets =
     fieldDim.map(_.toInt).scanLeft(0)((ep, et) => ep + et).dropRight(1).map(_.toLong).toArray
 

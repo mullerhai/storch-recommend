@@ -43,3 +43,23 @@ final class SingleTaskModel[ParamType <: FloatNN : Default](
   }
 }
 
+object SingleTaskModel {
+  def apply[ParamType <: FloatNN : Default](
+                                             categorical_field_dims: Seq[Int],
+                                             numerical_num: Int,
+                                             embed_dim: Int,
+                                             bottom_mlp_dims: Seq[Int],
+                                             tower_mlp_dims: Seq[Int],
+                                             task_num: Int,
+                                             dropout: Float
+                                           ): SingleTaskModel[ParamType] = new SingleTaskModel(
+                                             categorical_field_dims,
+                                             numerical_num,
+                                             embed_dim,
+                                             bottom_mlp_dims,
+                                             tower_mlp_dims,
+                                             task_num,
+                                             dropout
+                                           )
+  
+}

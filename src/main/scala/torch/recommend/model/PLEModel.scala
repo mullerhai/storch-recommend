@@ -119,7 +119,30 @@ final class PLEModel[ParamType <: FloatNN : Default](
 }
 
 
-
+object PLEModel {
+  def apply[ParamType <: FloatNN : Default](
+                                            categorical_field_dims: Seq[Int],
+                                            numerical_num: Int,
+                                            embed_dim: Int,
+                                            bottom_mlp_dims: Seq[Int],
+                                            tower_mlp_dims: Seq[Int],
+                                            task_num: Int,
+                                            shared_expert_num: Int,
+                                            specific_expert_num: Int,
+                                            dropout: Float
+                                          ): PLEModel[ParamType] = new PLEModel(
+                                            categorical_field_dims,
+                                            numerical_num,
+                                            embed_dim,
+                                            bottom_mlp_dims,
+                                            tower_mlp_dims,
+                                            task_num,
+                                            shared_expert_num,
+                                            specific_expert_num,
+                                            dropout
+                                          )
+  
+}
 
 //  val task_experts = for i <- 0 until (layers_num) yield task_num
 //  val task_gates = for i <- 0 until (layers_num) yield task_num
