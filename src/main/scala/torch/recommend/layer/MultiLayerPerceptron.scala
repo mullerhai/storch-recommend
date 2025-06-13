@@ -17,14 +17,17 @@ class MultiLayerPerceptron[ParamType <: FloatNN: Default](
 
   embed_dims.zipWithIndex.foreach {
     case (embed_dim, index) => {
-//      val block = registerModule(LinearBnReluDropBlock(input_dim, embed_dim, dropout),s"block_${index+1}")
-      layers.insert(index,register(LinearBnReluDropBlock(input_dim, embed_dim, dropout),s"block_${index+1}"))
+      val block = register(LinearBnReluDropBlock(input_dim, embed_dim, dropout),s"block_${index+1}")
+//      val block = LinearBnReluDropBlock(input_dim, embed_dim, dropout) //,s"block_${index+1}")
+      layers.append(block)
+//      layers.insert(index,register(LinearBnReluDropBlock(input_dim, embed_dim, dropout),s"block_${index+1}"))
     }
   }
   if (output_layer) {
 //    var output_linear = register(nn.Linear(input_dim, 1))
     layers.insert(embed_dims.length,register(nn.Linear(input_dim, 1)))
   }
+
   def apply(input: Tensor[ParamType]): Tensor[ParamType] = {
 
     layers(input)
