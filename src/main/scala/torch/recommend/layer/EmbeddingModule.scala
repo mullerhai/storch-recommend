@@ -8,6 +8,7 @@ import scala.collection.mutable.ListBuffer
 type IntOrString = Int | String
 
 //| ComplexNN
+//todo  has init error, cause by SENet
 final class EmbeddingModule[ParamType <: FloatNN: Default](
     datatypes: Seq[Map[String, IntOrString]],
     useSeNet: Boolean

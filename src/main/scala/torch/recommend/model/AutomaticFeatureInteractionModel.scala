@@ -45,7 +45,6 @@ class AutomaticFeatureInteractionModel[ParamType <: FloatNN: Default](
     val atten_x = this.attenEmbedding(embed_x)
     var cross_term = atten_x.transpose(0,1) 
     var step = 0
-//    val self_attensIter = 
     selfAttens.map(atten => {
       val cross_term_vec = atten.asInstanceOf[MultiheadAttention[ParamType]](cross_term,cross_term,cross_term)
       cross_term = cross_term_vec._1

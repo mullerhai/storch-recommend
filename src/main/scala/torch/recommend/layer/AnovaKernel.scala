@@ -39,6 +39,8 @@ object AnovaKernel:
       order: Int,
       reduce_sum: Boolean = true
   ): AnovaKernel[ParamType] = new AnovaKernel(order, reduce_sum)
+  
+  
 //      torch.sum(a.index(::,-1,::).to(dtype = this.paramType),dim = Seq(1),keepdim = false,dtype = this.paramType)
 //    val squareOfSum = torch.pow(torch.sum(input,dim=1),2)
 //    val sumOfSquare = torch.sum(torch.pow(input,2),dim=1)

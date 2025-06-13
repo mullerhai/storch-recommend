@@ -44,8 +44,7 @@ class HighOrderFactorizationMachineModel[ParamType <: FloatNN: Default](
   }
 }
 
-//    val out = torch.sigmoid(x.squeeze(1).to(dtype = this.paramType))
-//    out.to(dtype = this.paramType)
+
 object HighOrderFactorizationMachineModel:
   def apply[ParamType <: FloatNN: Default](
       field_dims: Seq[Int],
@@ -55,3 +54,9 @@ object HighOrderFactorizationMachineModel:
       dropout: Float
   ): HighOrderFactorizationMachineModel[ParamType] =
     new HighOrderFactorizationMachineModel(field_dims, embed_dim, order, mlp_dims, dropout)
+
+
+
+
+//    val out = torch.sigmoid(x.squeeze(1).to(dtype = this.paramType))
+//    out.to(dtype = this.paramType)

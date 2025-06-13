@@ -4,7 +4,7 @@ The storch-recommend project is a Scala-based implementation that offers a compr
 
 ### sbt repo
 ```
-libraryDependencies += "io.github.mullerhai" % "storch-recommend_3" % "0.1.0"
+libraryDependencies += "io.github.mullerhai" % "storch-recommend_3" % "0.1.1"
 ```
 
 ### Project URL

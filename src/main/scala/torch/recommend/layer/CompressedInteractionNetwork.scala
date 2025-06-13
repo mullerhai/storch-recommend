@@ -31,15 +31,6 @@ class CompressedInteractionNetwork[ParamType <: FloatNN: Default](
         dilation = 1,
         bias = true
       )
-//    conv_layers.append(
-//      nn.Conv1d(
-//        input_dim * prev_dim,
-//        cross_layer_size,
-//        kernel_size = 1,
-//        stride = 1,
-//        dilation = 1,
-//        bias = true
-//      )
     )
     if (splitHalf && i != num_layers - 1) {
       cross_layer_size = math.floor(cross_layer_size / 2).toInt
@@ -85,3 +76,15 @@ object CompressedInteractionNetwork:
       split_half: Boolean = true
   ): CompressedInteractionNetwork[ParamType] =
     new CompressedInteractionNetwork(input_dim, cross_layer_sizes, split_half)
+
+
+
+//    conv_layers.append(
+//      nn.Conv1d(
+//        input_dim * prev_dim,
+//        cross_layer_size,
+//        kernel_size = 1,
+//        stride = 1,
+//        dilation = 1,
+//        bias = true
+//      )

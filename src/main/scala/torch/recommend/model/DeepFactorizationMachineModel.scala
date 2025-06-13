@@ -30,9 +30,6 @@ class DeepFactorizationMachineModel[ParamType <: FloatNN: Default](
   }
 }
 
-//    val out = torch.sigmoid(x.squeeze(1).to(dtype = this.paramType))
-//    out.to(dtype = this.paramType)
-
 object DeepFactorizationMachineModel:
   def apply[ParamType <: FloatNN: Default](
       field_dims: Seq[Int],
@@ -41,3 +38,12 @@ object DeepFactorizationMachineModel:
       dropout: Float
   ): DeepFactorizationMachineModel[ParamType] =
     new DeepFactorizationMachineModel(field_dims, embed_dim, mlp_dims, dropout)
+
+
+
+
+
+
+
+//    val out = torch.sigmoid(x.squeeze(1).to(dtype = this.paramType))
+//    out.to(dtype = this.paramType)
